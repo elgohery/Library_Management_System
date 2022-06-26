@@ -1,0 +1,85 @@
+﻿@model List<Books.Models.student>
+@using Microsoft.AspNetCore.Http;
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 style="text-align:right;">Students Managment</h1>
+
+<table style="text-align:right;" class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Student Name
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Phone
+            </th>
+            <th>
+                Level
+            </th>
+
+            <th> Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.level)
+                </td>
+
+                <td>
+                    <a class="btn btn-outline-info" asp-action="Edit" asp-route-id="@item.Id">ترقيه الى مدير</a> |
+                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts
+{
+    @if (!string.IsNullOrEmpty(Context.Session.GetString("msgtype")))
+    {
+        if (Context.Session.GetString("msgtype") == "success")
+        {
+            <script>
+
+            Swal.fire({
+            title: '@Context.Session.GetString("title")',
+            text: '@Html.Raw(@Context.Session.GetString("msg"))',
+            confirmButtonText: 'حسناً',
+            icon: 'success'
+            });
+            </script>
+        }
+        else
+        {
+            <script >
+
+            Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!',
+            footer: '<a href="">Why do I have this issue?</a>'
+            })
+            </script >
+        }
+        Context.Session.SetString("msgtype", "");
+    }
+}
